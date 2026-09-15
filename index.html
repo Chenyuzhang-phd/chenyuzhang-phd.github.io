@@ -1110,7 +1110,7 @@ a:hover{color:var(--primary-dark)}
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeModal('wechatModal')"><i class="fas fa-times"></i></button>
     <h3><i class="fab fa-weixin"></i> <span data-i18n="wechatQRTitle">WeChat QR Code</span></h3>
-    <img src="materials/wechat-qr.jpg" alt="WeChat QR Code" style="width:220px;height:220px;border-radius:12px;object-fit:cover;margin:0 auto 16px;display:block">
+    <img src="assets/wechat-qr.png" alt="WeChat QR Code" style="width:220px;height:220px;border-radius:12px;object-fit:cover;margin:0 auto 16px;display:block">
     <p style="font-size:0.8125rem;color:var(--text-muted);text-align:center" data-i18n="wechatScanHint">Scan to add WeChat</p>
   </div>
 </div>
@@ -1118,7 +1118,7 @@ a:hover{color:var(--primary-dark)}
   <div class="modal-box" onclick="event.stopPropagation()">
     <button class="modal-close" onclick="closeModal('qqModal')"><i class="fas fa-times"></i></button>
     <h3><i class="fab fa-qq"></i> <span data-i18n="qqQRTitle">QQ QR Code</span></h3>
-    <img src="materials/qq-qr.jpg" alt="QQ QR Code" style="width:220px;height:220px;border-radius:12px;object-fit:cover;margin:0 auto 16px;display:block">
+    <img src="assets/qq-qr.png" alt="QQ QR Code" style="width:220px;height:220px;border-radius:12px;object-fit:cover;margin:0 auto 16px;display:block">
     <p style="font-size:0.8125rem;color:var(--text-muted);text-align:center" data-i18n="qqScanHint">Scan to add QQ</p>
   </div>
 </div>
@@ -1312,11 +1312,13 @@ window.openMat=function(file,title,type){
     renderImgGroup(files[0].images||files[0],imgContainer,title);
     hint.innerHTML=i18nDict[currentLang].matHintZoom||'Click image to zoom in/out · ESC to close';
     function renderImgGroup(imgs,container,t){
-      container.innerHTML='<div class="mat-loading"><div class="spin"></div><p data-i18n="matLoading">Loading...</p></div>';
       var multi=document.createElement('div');
       multi.className='mat-multi';
       var loaded=0;
       var total=imgs.length;
+      var progress=document.createElement('div');
+      progress.className='mat-loading';
+      progress.innerHTML='<div class="spin"></div><p>'+(i18nDict[currentLang].matLoading||'Loading...')+' <span class="mat-progress">0/'+total+'</span></p>';
       imgs.forEach(function(f,idx){
         var pageDiv=document.createElement('div');
         pageDiv.className='mat-page';
@@ -1324,34 +1326,35 @@ window.openMat=function(file,title,type){
         label.className='mat-page-label';
         label.textContent=(i18nDict[currentLang].matPage||'Page')+' '+(idx+1)+' / '+(i18nDict[currentLang].matOf||'of')+' '+total;
         pageDiv.appendChild(label);
+        var placeholder=document.createElement('div');
+        placeholder.className='mat-loading';
+        placeholder.innerHTML='<div class="spin"></div><p style="font-size:0.75rem">'+(i18nDict[currentLang].matLoading||'Loading...')+'</p>';
+        pageDiv.appendChild(placeholder);
         multi.appendChild(pageDiv);
+        container.innerHTML='';
+        container.appendChild(multi);
+        body.scrollTop=0;
+        container.scrollTop=0;
         var img=new Image();
         img.onload=function(){
           loaded++;
-          if(loaded===1){
-            container.innerHTML='';
-            container.appendChild(multi);
-            /* 滚动到顶部 */
-            body.scrollTop=0;
-            container.scrollTop=0;
-          }
+          progress.querySelector('.mat-progress').textContent=loaded+'/'+total;
+          pageDiv.removeChild(placeholder);
           img.style.cursor='zoom-in';
           img.addEventListener('click',function(){img.classList.toggle('zoomed');});
           pageDiv.appendChild(img);
         };
         img.onerror=function(){
           loaded++;
-          if(loaded===1){
-            container.innerHTML='';
-            container.appendChild(multi);
-          }
+          progress.querySelector('.mat-progress').textContent=loaded+'/'+total;
+          pageDiv.removeChild(placeholder);
           var errDiv=document.createElement('div');
           errDiv.className='mat-loading';
           errDiv.innerHTML='<i class="fas fa-exclamation-circle" style="font-size:2rem;color:var(--text-muted)"></i><p>'+(i18nDict[currentLang].matPageLoadFail||'Page')+' '+(idx+1)+' '+(i18nDict[currentLang].matLoadFailSuffix||'failed to load')+'</p>';
           pageDiv.appendChild(errDiv);
         };
         img.src='materials/'+f;
-        img.alt=t+' - 第'+(idx+1)+'页';
+        img.alt=t+' - Page '+(idx+1);
       });
     }
   }else if(type==='pdf'){
@@ -1410,31 +1413,31 @@ window.openMat=function(file,title,type){
       label.className='mat-page-label';
       label.textContent=(i18nDict[currentLang].matPage||'Page')+' '+(idx+1)+' / '+(i18nDict[currentLang].matOf||'of')+' '+total;
       pageDiv.appendChild(label);
+      var placeholder=document.createElement('div');
+      placeholder.className='mat-loading';
+      placeholder.innerHTML='<div class="spin"></div><p style="font-size:0.75rem">'+(i18nDict[currentLang].matLoading||'Loading...')+'</p>';
+      pageDiv.appendChild(placeholder);
       container.appendChild(pageDiv);
+      body.innerHTML='';
+      body.appendChild(container);
+      body.scrollTop=0;
+      hint.innerHTML=i18nDict[currentLang].matHintZoom||'Click image to zoom in/out · ESC to close';
       var img=new Image();
       img.onload=function(){
         loaded++;
-        if(loaded===1){
-          body.innerHTML='';
-          body.appendChild(container);
-          body.scrollTop=0;
-          hint.innerHTML=i18nDict[currentLang].matHintZoom||'Click image to zoom in/out · ESC to close';
-        }
+        pageDiv.removeChild(placeholder);
         pageDiv.appendChild(img);
       };
       img.onerror=function(){
         loaded++;
-        if(loaded===1){
-          body.innerHTML='';
-          body.appendChild(container);
-        }
+        pageDiv.removeChild(placeholder);
         var errDiv=document.createElement('div');
         errDiv.className='mat-loading';
         errDiv.innerHTML='<i class="fas fa-exclamation-circle" style="font-size:2rem;color:var(--text-muted)"></i><p>'+(i18nDict[currentLang].matPageLoadFail||'Page')+' '+(idx+1)+' '+(i18nDict[currentLang].matLoadFailSuffix||'failed to load')+'</p>';
         pageDiv.appendChild(errDiv);
       };
       img.src='materials/'+f;
-      img.alt=title+' - 第'+(idx+1)+'页';
+      img.alt=title+' - Page '+(idx+1);
       img.style.cursor='zoom-in';
       img.addEventListener('click',function(){this.classList.toggle('zoomed');});
     });
