@@ -1,0 +1,270 @@
+/* ================================================================
+   style.css  —  主样式表
+   包含：CSS 变量（明暗主题）、基础重置、布局、工具类
+   ================================================================ */
+
+/* ======================== CSS 变量：亮色主题 ======================== */
+:root {
+  /* 主色调 - 柔粉玫瑰 */
+  --c-primary:        #E8709A;
+  --c-primary-light:  #F48FB1;
+  --c-primary-dark:   #D14B7E;
+  --c-primary-rgb:    232, 112, 154;
+
+  /* 辅助色 */
+  --c-accent:         #F0A6C5;
+  --c-accent-2:       #D67B9C;
+
+  /* 语义色 */
+  --c-success:        #10B981;
+  --c-warning:        #F59E0B;
+  --c-danger:         #EF4444;
+
+  /* 亮色主题 - 背景与文字 */
+  --bg-body:          #FFF5F8;
+  --bg-glass:         rgba(255, 248, 250, 0.65);
+  --bg-glass-hover:   rgba(255, 248, 250, 0.80);
+  --bg-card:          rgba(255, 248, 250, 0.75);
+  --bg-nav:           rgba(255, 248, 250, 0.85);
+  --bg-section:       transparent;
+
+  --t-primary:        #4A2C36;
+  --t-secondary:       #7A5462;
+  --t-muted:           #B89AA6;
+  --t-on-primary:     #FFFFFF;
+
+  /* 边框与分割线 */
+  --border-color:     rgba(180, 140, 160, 0.25);
+  --border-glass:     rgba(255, 248, 250, 0.60);
+
+  /* 阴影 */
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.08);
+  --shadow-lg:        0 8px 32px rgba(0, 0, 0, 0.12);
+  --shadow-primary:   0 4px 20px rgba(var(--c-primary-rgb), 0.30);
+
+  /* 间距 */
+  --space-xs:   4px;
+  --space-sm:   8px;
+  --space-md:   16px;
+  --space-lg:   24px;
+  --space-xl:   32px;
+  --space-2xl:  48px;
+  --space-3xl:  64px;
+  --space-4xl:  96px;
+
+  /* 圆角 */
+  --radius-sm:  6px;
+  --radius-md:  12px;
+  --radius-lg:  20px;
+  --radius-pill: 999px;
+
+  /* 字体 */
+  --font-sans:  'Poppins', 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-cn:    'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+
+  /* 布局 */
+  --max-width:  1140px;
+  --nav-height: 64px;
+
+  /* 过渡 */
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ======================== CSS 变量：暗色主题 ======================== */
+[data-theme="dark"] {
+  --bg-body:          #1F1118;
+  --bg-glass:         rgba(45, 22, 32, 0.65);
+  --bg-glass-hover:   rgba(45, 22, 32, 0.80);
+  --bg-card:          rgba(45, 22, 32, 0.75);
+  --bg-nav:           rgba(31, 17, 24, 0.85);
+
+  --t-primary:        #FFE8F0;
+  --t-secondary:      #E8B8C8;
+  --t-muted:          #A87B8E;
+  --t-on-primary:     #1F1118;
+
+  --border-color:     rgba(180, 140, 160, 0.15);
+  --border-glass:     rgba(64, 36, 48, 0.50);
+
+  --shadow-sm:        0 1px 3px rgba(0, 0, 0, 0.30);
+  --shadow-md:        0 4px 16px rgba(0, 0, 0, 0.30);
+  --shadow-lg:        0 8px 32px rgba(0, 0, 0, 0.40);
+  --shadow-primary:   0 4px 20px rgba(var(--c-primary-rgb), 0.40);
+
+  --c-primary:        #F48FB1;
+  --c-primary-light:  #F8A8C4;
+  --c-primary-dark:   #E8709A;
+}
+
+/* ======================== 基础重置 ======================== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background: var(--bg-body);
+  color: var(--t-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+}
+
+/* ======================== 固定背景 ======================== */
+.fixed-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;
+  background: linear-gradient(135deg,
+    #FFE8F0 0%,
+    #FFDCE8 25%,
+    #FFF5F8 50%,
+    #FFD0E0 75%,
+    #FFE8F0 100%);
+  background-size: 400% 400%;
+  animation: bgShift 20s ease infinite;
+}
+
+[data-theme="dark"] .fixed-bg {
+  background: linear-gradient(135deg,
+    #1F1118 0%,
+    #2D1620 25%,
+    #1A0D14 50%,
+    #2D1620 75%,
+    #1F1118 100%);
+  background-size: 400% 400%;
+}
+
+@keyframes bgShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ======================== 通用布局 ======================== */
+.section {
+  width: calc(100% - 2rem);
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--space-3xl) 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.section-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--t-primary);
+  margin-bottom: var(--space-xs);
+}
+
+.section-subtitle {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--c-primary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ======================== 毛玻璃工具类 ======================== */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: background var(--transition), box-shadow var(--transition), transform var(--transition);
+}
+
+/* ======================== 按钮通用 ======================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--c-primary), var(--c-primary-dark));
+  color: var(--t-on-primary);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(var(--c-primary-rgb), 0.45);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--c-primary);
+  border-color: var(--c-primary);
+}
+
+.btn-outline:hover {
+  background: var(--c-primary);
+  color: var(--t-on-primary);
+  transform: translateY(-2px);
+}
+
+/* ======================== 响应式断点辅助 ======================== */
+@media (max-width: 768px) {
+  :root {
+    --space-3xl: 48px;
+    --space-4xl: 64px;
+  }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 15px; }
+}
+
+/* ======================== 滚动条美化 ======================== */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(var(--c-primary-rgb), 0.30);
+  border-radius: var(--radius-pill);
+}
+::-webkit-scrollbar-thumb:hover { background: rgba(var(--c-primary-rgb), 0.50); }
+
+/* ======================== 选中文本 ======================== */
+::selection {
+  background: rgba(var(--c-primary-rgb), 0.25);
+  color: var(--t-primary);
+}
+
+/* ======================== 无障碍/动效偏好 ======================== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+  .fixed-bg { animation: none; }
+}
