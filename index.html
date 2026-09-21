@@ -163,8 +163,7 @@ a:hover{color:var(--primary-dark)}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;
   border-radius:99px;background:var(--bg-elevated);border:1px solid var(--border);
   font-size:0.8125rem;font-weight:500;color:var(--primary);margin-bottom:16px}
-.hero-badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--primary);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(var(--primary-rgb),0.40)}50%{opacity:0.6;box-shadow:0 0 0 8px rgba(var(--primary-rgb),0)}}
+.hero-badge .pulse{width:8px;height:8px;border-radius:50%;background:var(--primary)}
 .hero h1{font-size:clamp(2.8rem,7vw,5rem);font-weight:800;line-height:1.05;
   letter-spacing:-2px;margin-bottom:12px;color:var(--text);white-space:nowrap}
 .hero h1 .grad{background:linear-gradient(135deg,var(--primary),var(--accent-2));
@@ -187,31 +186,24 @@ a:hover{color:var(--primary-dark)}
   display:flex;align-items:center;justify-content:center;color:var(--text-secondary);font-size:0.9rem;transition:all var(--t);background:transparent;cursor:pointer}
 .hero-socials a:hover,.hero-socials button:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-2px)}
 
-/* Hero 照片 - 大圆形 + 旋转光环 */
+/* Hero 照片 - 大圆形 + 静态光环 */
 .hero-photo-wrap{position:relative;width:320px;height:320px;flex-shrink:0}
 .hero-photo-wrap::before{content:'';position:absolute;inset:-8px;border-radius:50%;
   background:conic-gradient(var(--primary),var(--accent),var(--accent-2),var(--primary));
-  animation:spin 8s linear infinite;opacity:0.6}
-@keyframes spin{to{transform:rotate(360deg)}}
+  opacity:0.6}
 .hero-photo-wrap img{position:relative;width:100%;height:100%;border-radius:50%;
   object-fit:cover;border:6px solid var(--bg);z-index:2}
 
-/* 浮动装饰圆圈 */
+/* 静态装饰圆圈 */
 .float-dot{position:absolute;border-radius:50%;z-index:3;pointer-events:none}
-/* 圆圈定位在渐变光环(inset:-8px)之外，距photo-wrap边缘≥20px */
 .float-dot.d1{width:18px;height:18px;background:var(--primary);
-  top:-28px;right:30px;opacity:0.7;animation:floatA 5s ease-in-out infinite}
+  top:-28px;right:30px;opacity:0.7}
 .float-dot.d2{width:12px;height:12px;background:var(--accent);
-  top:45%;right:-28px;opacity:0.5;animation:floatB 6s ease-in-out infinite}
+  top:45%;right:-28px;opacity:0.5}
 .float-dot.d3{width:24px;height:24px;background:var(--accent-2);
-  bottom:-30px;left:35%;opacity:0.4;animation:floatC 7s ease-in-out infinite}
+  bottom:-30px;left:35%;opacity:0.4}
 .float-dot.d4{width:10px;height:10px;background:var(--primary);
-  top:20%;left:-26px;opacity:0.6;animation:floatD 4.5s ease-in-out infinite}
-/* 动画方向：始终向外或切线方向浮动，不进入光环区域 */
-@keyframes floatA{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,-12px)}}
-@keyframes floatB{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,8px)}}
-@keyframes floatC{0%,100%{transform:translate(0,0)}50%{transform:translate(-10px,10px)}}
-@keyframes floatD{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,-10px)}}
+  top:20%;left:-26px;opacity:0.6}
 
 @media(max-width:768px){
   .hero-inner{grid-template-columns:1fr;gap:32px;text-align:center}
